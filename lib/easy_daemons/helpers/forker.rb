@@ -9,14 +9,15 @@ module EasyDaemons
         
             def fork_worker(worker)
                 fork do
-                    log(:info, "Starting #{worker.name} worker in the background ...")
+                    logger = worker.instance_variable_get(:@logger)
+                    logger.info "Starting #{worker.name} worker in the background ..."
                     Process.setproctitle(worker.name)
                     Process.setsid
                     pid = curr_pid
-                    log(:info, "#{worker.name} worker successfully started in the background (pid=#{pid}).")
-                    log(:info, "Refreshing #{worker.pid_file_path} file with #{pid}.")
+                    logger.info "#{worker.name} worker successfully started in the background (pid=#{pid})."
+                    logger.info "Refreshing #{worker.pid_file_path} file with #{pid}."
                     refresh_pid_file(worker.pid_file_path, pid)
-                    log(:info, "#{worker.pid_file_path} successfully created with #{pid}.")
+                    logger.info "#{worker.pid_file_path} successfully created with #{pid}."
                     worker.run
                 end
             end
