@@ -66,7 +66,7 @@ module EasyDaemons
         end
         
         def validate_worker(worker)
-            raise InvalidWorkerClass unless worker.class < EasyDaemons::Worker
+            raise InvalidWorkerClass unless worker.respond_to?(:run)
         end
         
     end
